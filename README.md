@@ -1,1 +1,1 @@
-# vscode_wrapped
+# Git Wrapped
