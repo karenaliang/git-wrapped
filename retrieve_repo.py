@@ -5,7 +5,7 @@ import pandas as pd
 
 owner = 'karenaliang'
 repo = 'personalwebsite'
-token = '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'  
+token = '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'  
 
 
 print("=============")
@@ -49,6 +49,7 @@ headers = {
 # fetching all user repos
 response = requests.get(repos_url, headers=headers)
 repositories = response.json()
+languages_df = pd.DataFrame()     # dataframe with all languages and their bytes b4 aggregation
 
 if response.status_code == 200:
     for repo in repositories:
@@ -57,34 +58,68 @@ if response.status_code == 200:
         languages_url = f"https://api.github.com/repos/{owner}/{repo_name}/languages"
         response = requests.get(languages_url, headers=headers)
 
+        
+        # checking again for language request #
         if response.status_code == 200:
             languages_data = response.json()
             total_bytes = sum(languages_data.values())
 
-            print(f"Languages used in repository '{repo_name}': {languages_data}")
-
+            # print(f"Languages used in repository '{repo_name}': {languages_data}")
             percents = languages_data.copy()          
             percent_keys = percents.keys()
 
             for key in percent_keys:
                 percents[key] = percents.get(key)/total_bytes
 
-            print(f"Percent Usage Per Language: '{repo_name}': {percents}")
-            print(f"Total Bytes: {total_bytes}")
+            repo_df = pd.DataFrame(list(languages_data.items()), columns=['Language', 'Bytes'])
+            # print(repo_df)
+            # print(languages_df)
+            # print(" << after >> ")
+            languages_df = pd.concat([languages_df, repo_df], ignore_index=True)
+            # print(languages_df)
+            # print("==============================")
+
+            # print(f"Percent Usage Per Language: '{repo_name}': {percents}")
         else:
             print(f"Failed to fetch languages for repository '{repo_name}'")
+
+
+    ## Language Percentages in Total (All Repos Aggregated) ##
+    agg_bytes = languages_df.groupby("Language").agg("sum")
+    total_bytes = agg_bytes['Bytes'].sum()
+    percent_bytes = agg_bytes.copy()
+    percent_bytes['Bytes'] = percent_bytes['Bytes'].astype(float)
+
+    for i in agg_bytes.index:
+        percent_bytes.at[i, 'Bytes'] = agg_bytes.at[i, 'Bytes'] / total_bytes
+
+
+    ## Language Percentages Based on Count ##
+    lang_ct = languages_df.groupby("Language").agg("count")
+    total_bytes = lang_ct['Bytes'].sum()
+
+    percent_lang_ct = lang_ct.copy()
+    percent_lang_ct['Bytes'] = percent_lang_ct['Bytes'].astype(float)
+
+
+    for i in lang_ct.index:
+        percent_lang_ct.at[i, 'Bytes'] = lang_ct.at[i, 'Bytes'] / total_bytes
+
+
+    # percent_lang_ct.plot.pie(y='Bytes', figsize=(5, 5))
+    # plt.show()
+
+    # ## Plotting Percentages ##
+    # p_df = pd.DataFrame.from_dict(percents, orient='index', columns=['Percentage'], dtype=None)
+    # p_df.plot.pie(y='Percentage', figsize=(5, 5))
+    # # plt.show()
+
 else:
     print(f"Failed to fetch repositories. Status code: {response.status_code}")
 
 
-## Plotting Percentages ##
-p_df = pd.DataFrame.from_dict(percents, orient='index', columns=['Percentage'], dtype=None)
-p_df.plot.pie(y='Percentage', figsize=(5, 5))
-plt.show()
 
 print("=============")
-
-
 
 
 ##### BY INDIVIDUAL REPOSITORY #####
