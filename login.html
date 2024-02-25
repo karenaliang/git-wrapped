@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang = "en">
+  
+  <head>
+    <meta charset = "UTF-8">
+    <meta http-equiv="X-UA_Compatible" content="IE=edge">
+    <meta name = "viewport" content = "with=device-width, inital-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  </head>
+  
+  <body>
+    <div class = "container">
+        <div class = "box form-box">
+            <header>Login</header>
+            <form id = "form" onsubmit = "return false;">
+                <div class = "field input">
+                    <label for = "username">Username</label>
+                    <input type = "text" name = "username" id = "username" required>
+                </div>
+
+                <div class = "field input">
+                    <label for = "token">Token</label>
+                    <input type = "text" name = "token" id = "token" required>
+                </div>
+
+                <div class = "field input">
+                  <label for = "repo">Repository Name</label>
+                  <input type = "text" name = "repo" id = "repo" required>
+                </div>
+
+                <div class = "field">
+                  <input type = "submit" class = "btn" onclick = "somefunc();">
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+
+<!--
+    <div class = "wrapper">
+        <form action = "">
+            <h1>Login</h1>
+            <div class = "input-box">
+              <input type = "text" placeholder = "Username" required>
+              <i class='bx bxs-user'></i>
+            </div>
+            <div class = "input-box">
+              <input type = "token" placeholder = "Token" required>
+              <i class='bx bxs-lock-alt' ></i>
+            </div>
+            <button type = "submit" class = "btn">Submit</button>
+          
+    <h1>Git Wrapped</h1>
+
+    <p>all about your git history</p>
+
+<script>
+    function somefunc() {
+      getInfo();
+      TotalCommits();
+    }
+    function getInfo(); {
+      var username = document.getElementById("username").value;
+      var token = document.getElementById("token").value;
+      var repo = document.getElementById("repo").value;
+    }
+    function TotalCommits(username) {
+      const fetch = require('node-fetch');
+      fetch(`https://api.github.com/users/${username}/events`)
+          .then(response => {
+              if (response.status === 200) {
+                  return response.text();
+              } else {
+                  console.log(`Failed to retrieve data. Status code: ${response.status}`);
+              }
+          })
+          .then(data => {
+              if (data) {
+                  const commit_count = data.split('"type":"PushEvent"').length - 1;
+                  console.log(`Total Commit Count: ${commit_count}`);
+              }
+          })
+          .catch(error => console.error('Error:', error));
+          }
+  </script>
+
+-->
+  </body>
+
+</html>
