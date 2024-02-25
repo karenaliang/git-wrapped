@@ -2,14 +2,16 @@ import requests
 import time
 import matplotlib.pyplot as plt
 import pandas as pd
+from user import User
 
-owner = 'karenaliang'
-repo = 'personalwebsite'
-token = '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'  
+user = User(owner = 'karenaliang', repo = 'personalwebsite', token = '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')
+
+owner_ = user.owner
+repo_ = user.repo
+token_ = user.token
 
 
 print("=============")
-
 
 
 ##### ALL REPOSITORIES #####
@@ -17,11 +19,11 @@ print("=============")
 ## Total Commits in Github ##
 
 # prompt user to enter info
-# owner = input("Enter your GitHub username: ")
-# token = input("Enter access token: ")
+# owner_ = input("Enter your GitHub username: ")
+# token_ = input("Enter access token: ")
 
 # get events from GitHub API
-response = requests.get(f"https://api.github.com/users/{owner}/events")
+response = requests.get(f"https://api.github.com/users/{owner_}/events")
 
 # check if request was successful 
 if response.status_code == 200:
@@ -39,10 +41,10 @@ print("=============")
 ## Language Breakdown in Github ##
 print("Language Breakdown in Github")
 
-repos_url = f"https://api.github.com/users/{owner}/repos"
+repos_url = f"https://api.github.com/users/{owner_}/repos"
 
 headers = {
-    "Authorization": f"Bearer {token}",
+    "Authorization": f"Bearer {token_}",
     "Accept": "application/vnd.github.v3+json"
 }
 
@@ -55,7 +57,7 @@ if response.status_code == 200:
     for repo in repositories:
         ## per every repo ##
         repo_name = repo["name"]
-        languages_url = f"https://api.github.com/repos/{owner}/{repo_name}/languages"
+        languages_url = f"https://api.github.com/repos/{owner_}/{repo_name}/languages"
         response = requests.get(languages_url, headers=headers)
 
         
@@ -105,7 +107,6 @@ if response.status_code == 200:
     for i in lang_ct.index:
         percent_lang_ct.at[i, 'Bytes'] = lang_ct.at[i, 'Bytes'] / total_bytes
 
-
     # percent_lang_ct.plot.pie(y='Bytes', figsize=(5, 5))
     # plt.show()
 
@@ -126,33 +127,33 @@ print("=============")
 
 # ### BASIC REPO STATS ###
 
-# def get_github_repo_stats(owner, repo, token=None):
-#     base_url = "https://api.github.com/repos"
-#     url = f"{base_url}/{owner}/{repo}"
+def get_github_repo_stats(owner, repo, token=None):
+    base_url = "https://api.github.com/repos"
+    url = f"{base_url}/{owner}/{repo}"
 
-#     headers = {}
-#     if token:
-#         headers["Authorization"] = f"Bearer {token}"
+    headers = {}
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
 
-#     response = requests.get(url, headers=headers)
+    response = requests.get(url, headers=headers)
 
-#     if response.status_code == 200:
-#         return response.json()
-#     else:
-#         print(f"Error: {response.status_code}")
-#         return None
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Error: {response.status_code}")
+        return None
 
-# repo_stats = get_github_repo_stats(owner, repo, token)
+repo_stats = get_github_repo_stats(owner_, repo_, token_)
 
-# if repo_stats:
-#     print(f"Repository Name: {repo_stats['name']}")
-#     print(f"Stars: {repo_stats['stargazers_count']}")
-#     print(f"Forks: {repo_stats['forks_count']}")
-#     print(f"Watchers: {repo_stats['subscribers_count']}")
-#     print(f"Issues: {repo_stats['open_issues_count']}")
-#     print(f"Description: {repo_stats['description']}")
-# else:
-#     print("Failed to retrieve repository stats.")
+if repo_stats:
+    print(f"Repository Name: {repo_stats['name']}")
+    print(f"Stars: {repo_stats['stargazers_count']}")
+    print(f"Forks: {repo_stats['forks_count']}")
+    print(f"Watchers: {repo_stats['subscribers_count']}")
+    print(f"Issues: {repo_stats['open_issues_count']}")
+    print(f"Description: {repo_stats['description']}")
+else:
+    print("Failed to retrieve repository stats.")
 
 
 
@@ -187,7 +188,7 @@ print("=============")
 # code_freq = None
 
 # while code_freq is None:
-#     code_freq = get_code_frequency_stats(owner, repo)
+#     code_freq = get_code_frequency_stats(owner_, repo_)
 #     time.sleep(5)  # Check again after 5 seconds
 
 # if code_freq:
@@ -233,7 +234,7 @@ print("=============")
 # commit_ct = None
 
 # while commit_ct is None:
-#     commit_ct = get_weekly_commit_count(owner, repo)
+#     commit_ct = get_weekly_commit_count(owner_, repo_)
 #     time.sleep(5)  # Check again after 5 seconds
 
 # if commit_ct:
