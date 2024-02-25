@@ -11,7 +11,7 @@ import os
 
 
 
-user = User(owner = 'karenaliang', repo = '', token = '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')
+user = User(owner = 'karenaliang', repo = 'personalwebsite', token = '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')
 
 owner_ = user.owner
 repo_ = user.repo
@@ -103,12 +103,7 @@ if response.status_code == 200:
                 percents[key] = percents.get(key)/total_bytes
 
             repo_df = pd.DataFrame(list(languages_data.items()), columns=['Language', 'Bytes'])
-            # print(repo_df)
-            # print(languages_df)
-            # print(" << after >> ")
             languages_df = pd.concat([languages_df, repo_df], ignore_index=True)
-            # print(languages_df)
-            # print("==============================")
 
             # print(f"Percent Usage Per Language: '{repo_name}': {percents}")
         else:
@@ -140,9 +135,9 @@ if response.status_code == 200:
     # plt.show()
 
     # ## Plotting Percentages ##
-    # p_df = pd.DataFrame.from_dict(percents, orient='index', columns=['Percentage'], dtype=None)
-    # p_df.plot.pie(y='Percentage', figsize=(5, 5))
-    # # plt.show()
+    p_df = pd.DataFrame.from_dict(percents, orient='index', columns=['Percentage'], dtype=None)
+    p_df.plot.pie(y='Percentage', figsize=(5, 5))
+    plt.show()
 
 else:
     print(f"Failed to fetch repositories. Status code: {response.status_code}")
@@ -185,7 +180,7 @@ else:
     print("Failed to retrieve repository stats.")
 
 
-# print("=============")
+print("=============")
 ### Weekly Commit Activity ###
 print("Weekly Commit Activity")
 def get_code_frequency_stats(owner, repo, token=None):
@@ -202,7 +197,7 @@ def get_code_frequency_stats(owner, repo, token=None):
     if response.status_code == 200:
         return response.json()
     elif response.status_code == 202:
-        print("Request accepted. Check again later.")
+        # print("Request accepted. Check again later.")
         return None
     elif response.status_code == 204:
         print("No content.")
@@ -222,8 +217,6 @@ while code_freq is None:
     time.sleep(5)  # Check again after 5 seconds
 
 if code_freq:
-    print("Code Frequency Stats:")
-    print(code_freq)
     print(f"Timestamp: {code_freq[0][0]}")
     print(f"Additions: {code_freq[0][1]}")
     print(f"Deletions: {code_freq[0][2]}")
@@ -251,7 +244,7 @@ def get_weekly_commit_count(owner, repo, token=None):
     if response.status_code == 200:
         return response.json()
     elif response.status_code == 202:
-        print("Request accepted. Checking again in a moment.")
+        # print("Request accepted. Checking again in a moment.")
         return None
     elif response.status_code == 204:
         print("No content.")
