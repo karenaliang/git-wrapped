@@ -3,4 +3,4 @@ Introducing GitWrapped, a platform where users can unwrap their past year in Git
 
 Upgrade your Github experience with GitWrapped, because your year in code deserves a celebration!
 
-* Created for HackIllinois 2024 *
+\* Created for HackIllinois 2024 *
